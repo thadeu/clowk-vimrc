@@ -108,7 +108,7 @@ The leader key is `Space`.
 | `<Leader>fb` / `<Leader>fg` / `<Leader>fr` | fuzzbox: buffers / grep / recent files |
 | `<Leader>e` | NERDTree, open or close |
 | `<Leader>nt` / `<Leader>nf` | NERDTree toggle / find current file |
-| `<Leader>t` | Floating terminal |
+| `<Leader>t` | Floating terminal, open or close (toggle) |
 | `<Leader>ff` | Fix the file with ALE |
 | `<Leader>fj` / `<Leader>fcj` | Format JSON, pretty / compact |
 | `<Leader>n` | Stop the search highlight |

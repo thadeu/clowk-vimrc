@@ -254,7 +254,8 @@ nmap <Leader>dm :delm! <bar> delm A-Z0-9<CR>
 let g:rainbow_active = 1
 
 " Floaterm
-nmap <Leader>t :FloatermNew --position=center<CR>
+let g:floaterm_position     = 'center'
+nmap <Leader>t :FloatermToggle<CR>
 nmap <F7> :FloatermNew --wintype=normal --position=right<CR>
 nmap <F8> :FloatermNew --wintype=normal --position=right radian<CR>
 nmap <F9> :FloatermNew --wintype=normal --position=right python3<CR>
