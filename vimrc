@@ -25,7 +25,9 @@ Plug 'airblade/vim-gitgutter'                                             " Git 
 Plug 'camspiers/lens.vim'                                                 " Lens
 Plug 'vim-airline/vim-airline'                                            " Airline
 Plug 'godlygeek/tabular'                                                  " Text filtering and alignment
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } } " Markdown preview
+if executable('node')
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } } " Markdown preview (precisa de node)
+endif
 Plug 'plasticboy/vim-markdown'                                            " Markdown editing
 Plug 'terryma/vim-multiple-cursors'                                       " Multiple cursors
 Plug 'preservim/nerdtree'                                                 " File tree
@@ -41,17 +43,23 @@ Plug 'honza/vim-snippets'                                                 " Snip
 Plug 'mhinz/vim-startify'                                                 " Start screen
 Plug 'wellle/targets.vim'                                                 " Add text objects to help navigation
 Plug 'ryanoasis/vim-devicons'                                             " Show icons for files
-Plug 'nvim-lua/plenary.nvim'                                              " Plenary
-Plug '3rd/image.nvim'                                                     " Image viewer
+if has('nvim')
+  Plug 'nvim-lua/plenary.nvim'                                            " Plenary (so no neovim)
+  Plug '3rd/image.nvim'                                                   " Image viewer (so no neovim)
+endif
 Plug 'sheerun/vim-polyglot'                                               " Syntax highlighting
 Plug 'dense-analysis/ale'                                                 " Linting
 Plug 'kcsongor/vim-tabbar'                                                " Tabbar
 Plug 'morhetz/gruvbox'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+if executable('go')
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }                      " Go (precisa do go)
+endif
 
-" LSP e Autocompletion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}                           " LSP client + autocompletion
-Plug 'github/copilot.vim'                                                 " GitHub Copilot (gratuito para uso pessoal)
+" LSP e Autocompletion (precisam de node, pulados em server sem node)
+if executable('node')
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}                         " LSP client + autocompletion
+  Plug 'github/copilot.vim'                                               " GitHub Copilot (gratuito para uso pessoal)
+endif
 
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -260,9 +268,9 @@ nmap <S-CR> :FloatermSend <CR>
 vmap <Leader>l :'<,'>FloatermSend <CR>
 vmap <S-CR> :'<,'>FloatermSend <CR>
 
-" Vim Easy Align
-xmap <Leader>ea <Plug>(EasyAlign)
-nmap <Leader>ea <Plug>(EasyAlign)
+" Vim Easy Align (ga: <Leader>ea atrasaria o <Leader>e do NERDTree)
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 " Moving text
 vmap J :m '>+1<CR>gv=gv
@@ -468,6 +476,7 @@ vnoremap <silent> <Leader>fcj :'<,'>! jq --compact-output .<CR>
 let g:NERDTreeHijackNetrw = 1
 let loaded_netrwPlugin = 1
 
+nmap <Leader>e :NERDTreeToggle<CR>
 nmap <Leader>nt :NERDTreeToggle<CR>
 nmap <Leader>nf :NERDTreeFind<CR>
 

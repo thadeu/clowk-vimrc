@@ -17,6 +17,7 @@ PLUG_DEST="$HOME/.vim/autoload/plug.vim"
 
 INSTALL_DEPS=1
 INSTALL_PLUGINS=1
+CLEAN_PLUGINS=1
 DO_UNINSTALL=0
 KEEP_BACKUP=1
 
@@ -43,6 +44,7 @@ Options:
   --ref <ref>     Branch, tag or commit to install from (default: main)
   --no-deps       Do not install system packages (vim, git, curl)
   --no-plugins    Copy the vimrc only, do not run :PlugInstall
+  --no-clean      Keep plugins that the config does not use (no :PlugClean)
   --no-backup     Overwrite an existing ~/.vimrc without a backup copy
   --uninstall     Remove ~/.vimrc, ~/.vim/plugged and vim-plug
   -h, --help      Show this help
@@ -60,6 +62,7 @@ while [ $# -gt 0 ]; do
     --ref=*)      REF="${1#*=}"; shift ;;
     --no-deps)    INSTALL_DEPS=0; shift ;;
     --no-plugins) INSTALL_PLUGINS=0; shift ;;
+    --no-clean)   CLEAN_PLUGINS=0; shift ;;
     --no-backup)  KEEP_BACKUP=0; shift ;;
     --uninstall)  DO_UNINSTALL=1; shift ;;
     -h|--help)    usage; exit 0 ;;
@@ -208,6 +211,13 @@ if [ "$INSTALL_PLUGINS" -eq 1 ]; then
     warn "PlugInstall returned an error, open vim and run :PlugInstall to see it"
   fi
 
+  if [ "$CLEAN_PLUGINS" -eq 1 ] && [ -d "$HOME/.vim/plugged" ]; then
+    if vim -es -u "$VIMRC_DEST" -i NONE \
+          -c 'PlugClean!' -c 'qall!' </dev/null >/dev/null 2>&1; then
+      ok "removed plugins that the config does not use"
+    fi
+  fi
+
   vim --version 2>/dev/null | head -1 || true
 else
   warn "plugins skipped, run :PlugInstall inside vim"
@@ -218,10 +228,10 @@ fi
 vim_major="$(vim --version 2>/dev/null | sed -n '1s/^VIM - Vi IMproved \([0-9]\{1,\}\).*/\1/p')"
 
 missing_opt=""
-has node || missing_opt="${missing_opt}  - node (coc.nvim, copilot.vim, markdown-preview)\n"
-has go   || missing_opt="${missing_opt}  - go (vim-go)\n"
-has rg   || missing_opt="${missing_opt}  - ripgrep (makes fuzzbox faster, obeys .gitignore)\n"
-has jq   || missing_opt="${missing_opt}  - jq (JSON format maps)\n"
+has node || missing_opt="${missing_opt}  - node    -> coc.nvim, copilot.vim and markdown-preview are not installed\n"
+has go   || missing_opt="${missing_opt}  - go      -> vim-go is not installed\n"
+has rg   || missing_opt="${missing_opt}  - ripgrep -> fuzzbox uses git or find, which is slower\n"
+has jq   || missing_opt="${missing_opt}  - jq      -> the JSON format maps do not work\n"
 
 echo
 ok "clowk-vimrc is ready"
@@ -231,7 +241,7 @@ if [ -n "$vim_major" ] && [ "$vim_major" -lt 9 ]; then
 fi
 
 if [ -n "$missing_opt" ]; then
-  echo "${C_DIM}Optional tools that are not installed:${C_RESET}"
+  echo "${C_DIM}Tools that are not installed on this machine:${C_RESET}"
   printf "${C_DIM}%b${C_RESET}" "$missing_opt"
-  echo "${C_DIM}The other plugins work without them.${C_RESET}"
+  echo "${C_DIM}The config skips the plugins that need them, vim starts with no errors.${C_RESET}"
 fi
