@@ -215,13 +215,20 @@ fi
 
 # ---------------------------------------------------------------- report
 
+vim_major="$(vim --version 2>/dev/null | sed -n '1s/^VIM - Vi IMproved \([0-9]\{1,\}\).*/\1/p')"
+
 missing_opt=""
 has node || missing_opt="${missing_opt}  - node (coc.nvim, copilot.vim, markdown-preview)\n"
 has go   || missing_opt="${missing_opt}  - go (vim-go)\n"
-has fzf  || missing_opt="${missing_opt}  - fzf binary (fzf.vim installs its own copy)\n"
+has rg   || missing_opt="${missing_opt}  - ripgrep (makes fuzzbox faster, obeys .gitignore)\n"
+has jq   || missing_opt="${missing_opt}  - jq (JSON format maps)\n"
 
 echo
 ok "clowk-vimrc is ready"
+
+if [ -n "$vim_major" ] && [ "$vim_major" -lt 9 ]; then
+  warn "vim $vim_major found: fuzzbox needs vim 9+, so <Space><Space> uses fzf here"
+fi
 
 if [ -n "$missing_opt" ]; then
   echo "${C_DIM}Optional tools that are not installed:${C_RESET}"

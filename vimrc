@@ -15,6 +15,9 @@ Plug 'junegunn/vim-easy-align'                                            " Alig
 Plug 'junegunn/vim-emoji'                                                 " Emoji support
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }                       " Fuzzy file finder
 Plug 'junegunn/fzf.vim'                                                   " Fuzzy file finder
+if !has('nvim') && v:version >= 900
+  Plug 'vim-fuzzbox/fuzzbox.vim'                                          " Fuzzy finder nativo (Vim 9+)
+endif
 Plug 'junegunn/limelight.vim'                                             " Highlight matching parenthesis
 Plug 'junegunn/vim-slash'                                                 " Slash commands
 Plug 'voldikss/vim-floaterm'                                              " Floating terminal
@@ -213,6 +216,24 @@ let g:fzf_action = {
   \ 'ctrl-i': 'split',
   \ 'ctrl-t': 'tab split',
   \ }
+
+" ========== Fuzzbox ==========
+" Prompt no topo, igual ao Cmd+P do VSCode
+let g:fuzzbox_dropdown = 1
+
+" Buscador de arquivos: Fuzzbox no Vim 9+, fzf nas versoes antigas
+function! ClowkFuzzyFiles() abort
+  if exists(':FuzzyFilesRoot') == 2
+    FuzzyFilesRoot
+  elseif exists(':Files') == 2
+    execute 'Files' g:vim_start_dir
+  else
+    echohl WarningMsg | echo 'Nenhum fuzzy finder instalado' | echohl None
+  endif
+endfunction
+
+" Barra de espaco 2x (<Leader><Space>) abre a busca de arquivos
+nnoremap <silent> <Leader><Space> :call ClowkFuzzyFiles()<CR>
 
 
 " Highlight yanks

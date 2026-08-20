@@ -62,11 +62,15 @@ Backup files stay in your home directory.
 
 Necessary: `vim` 8.0 or later, `git`, `curl`.
 
+`vim` 9.0 or later is necessary for the fuzzbox fuzzy finder. With an older vim,
+the config does not install fuzzbox and `Space Space` uses fzf.
+
 These tools are not necessary, but some plugins need them:
 
 | Tool | Plugins |
 | --- | --- |
 | `node` | coc.nvim, copilot.vim, markdown-preview.nvim |
+| `ripgrep` (`rg`) | Makes fuzzbox faster and makes it obey `.gitignore` |
 | `go` | vim-go |
 | `jq` | JSON format maps (`<Leader>fj`) |
 | A Nerd Font in your terminal | vim-devicons, vim-airline symbols |
@@ -80,7 +84,9 @@ The leader key is `Space`.
 
 | Key | Action |
 | --- | --- |
-| `<Leader>f` | Find files (fzf) |
+| `Space Space` | Find files in the project root — like `Cmd+P` in VSCode |
+| `<Leader>f` | Find files with fzf, from the start directory |
+| `<Leader>fb` / `<Leader>fg` / `<Leader>fr` | fuzzbox: buffers / grep / recent files |
 | `<Leader>nt` / `<Leader>nf` | NERDTree toggle / find current file |
 | `<Leader>t` | Floating terminal |
 | `<Leader>ff` | Fix the file with ALE |
@@ -96,6 +102,23 @@ The leader key is `Space`.
 
 Git maps use vim-fugitive: `<Leader>ga` (write), `<Leader>gb` (blame),
 `<Leader>gca` (amend), `<Leader>gco` (checkout).
+
+## Fuzzy finder
+
+`Space Space` opens [fuzzbox](https://github.com/vim-fuzzbox/fuzzbox.vim) with
+`:FuzzyFilesRoot`, which lists the files of the project (VCS) root, like `Cmd+P`
+in VSCode. Fuzzbox is written in vim9script and uses the native popup windows of
+Vim, so it needs no external program.
+
+Inside the finder: `Ctrl-n` / `Ctrl-p` move, `Enter` opens, `Ctrl-v` opens a
+vertical split, `Ctrl-t` opens a tab, `Esc` closes.
+
+Fuzzbox adds more maps: `<Leader>fb` (buffers), `<Leader>fg` (grep),
+`<Leader>fh` (help), `<Leader>fi` (in buffer), `<Leader>fr` (recent files),
+`<Leader>fp` (previous search). It does not replace the maps of this config, so
+`<Leader>ff` stays with ALEFix and `<Leader>f` stays with fzf.
+
+To use the prompt at the bottom of the window, set `g:fuzzbox_dropdown = 0`.
 
 ## Files
 
