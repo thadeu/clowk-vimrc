@@ -3,6 +3,8 @@
 A single `~/.vimrc` for servers, VMs and EC2 instances. One command installs the
 config, [vim-plug](https://github.com/junegunn/vim-plug) and all plugins.
 
+![clowk-vimrc: NERDTree, gruvbox and airline in a remote shell](images/1.png)
+
 ## Install
 
 ```bash
@@ -145,6 +147,7 @@ To use the prompt at the bottom of the window, set `g:fuzzbox_dropdown = 0`.
 | --- | --- |
 | `vimrc` | The config. It becomes `~/.vimrc` |
 | `install.sh` | The installer |
+| `images/` | Screenshots for this page |
 
 The config comes from this gist:
 <https://gist.github.com/thadeu/191f1b2444b519c6f3678b0dfaaf702e>
